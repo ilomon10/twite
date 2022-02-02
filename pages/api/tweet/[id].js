@@ -22,6 +22,7 @@ export default async function handler(req, res) {
       }
     });
     const { data, includes } = tweet.data;
+    
     res.status(tweet.status).json({
       id: data.id,
       text: data.text,
@@ -29,7 +30,7 @@ export default async function handler(req, res) {
       created_at: data.created_at,
       source: data.source,
 
-      urls: data.entities.urls,
+      urls: data.entities && data.entities.urls,
 
       name: includes.users[0].name,
       username: includes.users[0].username,

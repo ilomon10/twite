@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { Box } from "./Box"
 import { TextField } from "./TextField"
 import { match } from "path-to-regexp"
@@ -27,8 +27,8 @@ const Anchor = ({ text, href }) => {
 export const TweetLoader = () => {
   const canvasRef = useRef(null);
 
-  const [url, setUrl] = useState("https://twitter.com/KompasTV/status/1488324219288965122");
-  const [tweetId, setTweetId] = useState("1488324219288965122");
+  const [url, setUrl] = useState("https://twitter.com/Jack/status/20");
+  const [tweetId, setTweetId] = useState("20");
   const [loading, setLoading] = useState(false);
   const [tweet, setTweet] = useState(null);
   const [ratio, setRatio] = useState(1);
@@ -86,7 +86,7 @@ export const TweetLoader = () => {
           text = text.replace(url, anchor);
         });
       } catch (err) {
-        console.error(err);
+        // do nothing
       }
 
       tweet.data.text = text;
@@ -121,6 +121,10 @@ export const TweetLoader = () => {
       anchorDownload.click();
     });
   }, [tweet, ratio]);
+
+  useEffect(() => {
+    fetch(tweetId);
+  }, []);
 
   return (
     <Box>
