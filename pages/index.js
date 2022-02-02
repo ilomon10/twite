@@ -32,7 +32,12 @@ export default function Home(props) {
           </Box>
           <Box>
             <Text>
-              <IconButton as="a" target="_blank" href="https://github.com/ilomon10/twite" size={"2"}>
+              <IconButton
+                as="a"
+                target="_blank"
+                href="https://github.com/ilomon10/twite"
+                size="2"
+              >
                 <GitHubLogoIcon />
               </IconButton>
             </Text>

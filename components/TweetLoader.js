@@ -5,7 +5,7 @@ import { match } from "path-to-regexp"
 import axios from "axios"
 import { Container } from "./Container"
 import { Link } from "./Link"
-import { CameraIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons"
+import { CameraIcon, MagnifyingGlassIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons"
 
 import ReactDOMServer from "react-dom/server"
 import { useDebouncedCallback } from "use-debounce"
@@ -17,6 +17,8 @@ import { Text } from "./Text"
 import { IconButton } from "./IconButton"
 
 import { toPng } from "html-to-image"
+import { Switch } from "./Switch"
+import { Badge } from "./Badge"
 
 const separator = match("/:username/status/:tweetId");
 
@@ -32,6 +34,10 @@ export const TweetLoader = () => {
   const [loading, setLoading] = useState(false);
   const [tweet, setTweet] = useState(null);
   const [ratio, setRatio] = useState(1);
+  const [options, setOptions] = useState({
+    forceVerified: false,
+    darkMode: false
+  })
 
   const onChange = useCallback((e) => {
     setUrl(e.target.value);
@@ -146,32 +152,64 @@ export const TweetLoader = () => {
           </Button>
         </ControlGroup>
         {tweet &&
-          <Flex align="center" justify={"between"} css={{ mb: "$4" }}>
-            <Box>
-              <ControlGroup>
-                <Button
-                  variant={ratio === 1 ? "blue" : "gray"}
-                  onClick={() => {
-                    setRatio(1);
+          <Box css={{ mb: "$4" }}>
+            <Flex align="center" justify={"between"} css={{ mb: "$4" }}>
+              <Box>
+                <ControlGroup>
+                  <Button
+                    variant={ratio === 1 ? "blue" : "gray"}
+                    onClick={() => {
+                      setRatio(1);
+                    }}
+                  >1:1 Square</Button>
+                  <Button
+                    variant={ratio === 9 / 16 ? "blue" : "gray"}
+                    onClick={() => {
+                      setRatio(9 / 16);
+                    }}
+                  >9:16 Stories</Button>
+                </ControlGroup>
+              </Box>
+              <Flex>
+                <Switch
+                  id="force-verified"
+                  onCheckedChange={(e) => {
+                    setOptions(opt => ({ ...opt, forceVerified: e }));
                   }}
-                >1:1 Square</Button>
-                <Button
-                  variant={ratio === 9 / 16 ? "blue" : "gray"}
+                />
+                <Text as="label" for="force-verified" css={{ ml: "$2" }}>Force verified</Text>
+              </Flex>
+            </Flex>
+            <Flex align="center" justify={"between"}>
+              <Flex align="center">
+                <IconButton
+                  variant="raised"
+                  size="2"
+                  onClick={takeSnapshot}
+                  title="Capture"
+                >
+                  <CameraIcon />
+                </IconButton>
+                <Badge css={{ ml: "$2" }} size="1">Capture</Badge>
+              </Flex>
+              <Flex align="center">
+                <Badge css={{ mr: "$2" }} size="1">Dark mode soon</Badge>
+                <IconButton
+                  size="2"
+                  state="waiting"
                   onClick={() => {
-                    setRatio(9 / 16);
+                    setOptions(opt => ({ ...opt, darkMode: !opt.darkMode }));
                   }}
-                >9:16 Stories</Button>
-              </ControlGroup>
-            </Box>
-            <IconButton
-              size="2"
-              onClick={takeSnapshot}
-            >
-              <CameraIcon />
-            </IconButton>
-          </Flex>}
+                  title="Dark Mode"
+                >
+                  {options.darkMode && <SunIcon />}
+                  {!options.darkMode && <MoonIcon />}
+                </IconButton>
+              </Flex>
+            </Flex>
+          </Box>}
       </Container>
-      {tweet && <TweetCanvas tweet={tweet} ratio={ratio} canvasRef={canvasRef} />}
+      {tweet && <TweetCanvas options={options} tweet={tweet} ratio={ratio} canvasRef={canvasRef} />}
     </Box >
   )
 }

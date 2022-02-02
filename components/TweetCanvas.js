@@ -11,7 +11,7 @@ import moment from "moment"
 import { AspectRatio } from "@radix-ui/react-aspect-ratio"
 import { useEffect, useRef, useState } from "react"
 
-export const TweetCanvas = ({ tweet, ratio, canvasRef }) => {
+export const TweetCanvas = ({ tweet, ratio, canvasRef, options }) => {
   const contentRef = useRef(null);
   const [scale, setScale] = useState(null);
 
@@ -21,7 +21,7 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef }) => {
     const contentHeight = contentRef.current.clientHeight;
 
     if (window.innerWidth < 467) return;
-    
+
     let factor;
     if (canvasHeight > contentHeight) {
       factor = canvasHeight - contentHeight;
@@ -66,8 +66,9 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef }) => {
                 </Box>
                 <Box css={{ ml: "$2" }}>
                   <Flex>
-                    <Text size="2" css={{ fontWeight: "bold" }}>{tweet.name}</Text>
-                    <VerifiedBadge css={{ ml: "$1" }} />
+                    <Text size="2" css={{ fontWeight: "bold", lineHeight: "16px" }}>{tweet.name}</Text>
+                    {(tweet.verified === true || options.forceVerified) &&
+                      <VerifiedBadge css={{ ml: "$1" }} />}
                   </Flex>
                   <Text size="2">@{tweet.username}</Text>
                 </Box>
