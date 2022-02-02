@@ -18,11 +18,10 @@ export default async function handler(req, res) {
         "tweet.fields": "created_at,source,public_metrics,context_annotations,entities",
         "expansions": "attachments.media_keys,author_id,attachments.poll_ids",
         "user.fields": "profile_image_url,verified",
-        "media.fields": "media_key,url,height,width,preview_image_url"
+        "media.fields": "media_key,url,height,width,preview_image_url,alt_text"
       }
     });
     const { data, includes } = tweet.data;
-    // console.log(data);
     res.status(tweet.status).json({
       id: data.id,
       text: data.text,

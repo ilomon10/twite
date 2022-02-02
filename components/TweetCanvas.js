@@ -32,7 +32,7 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef }) => {
     }
 
     setScale(factor / 100);
-  }, [ratio]);
+  }, [ratio, canvasRef]);
 
   return (
     <Container size="2" css={{ mb: "$4" }}>
@@ -95,6 +95,7 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef }) => {
                       height={media.height}
                       width={media.width}
                       src={media.type === "video" ? media.preview_image_url : media.url}
+                      alt={tweet.name}
                     />
                   </Box>
                 )
