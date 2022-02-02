@@ -14,8 +14,12 @@ const StyledVerifiedBadge = styled('div', Flex, {
   height: '$3',
 });
 
-export const VerifiedBadge = React.forwardRef((props, forwardedRef) => (
-  <StyledVerifiedBadge {...props} ref={forwardedRef}>
-    <CheckIcon />
-  </StyledVerifiedBadge>
-));
+export const VerifiedBadge = React.forwardRef((props, forwardedRef) => {
+  return (
+    <StyledVerifiedBadge {...props} ref={forwardedRef}>
+      <CheckIcon />
+    </StyledVerifiedBadge>
+  )
+});
+
+VerifiedBadge.displayName = "VerifiedBadge";
