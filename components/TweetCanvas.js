@@ -108,14 +108,16 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef, options }) => {
                 align="center"
                 css={{
                   mt: "$2",
-                  opacity: 0.75
+                  opacity: 0.75,
                 }}
               >
-                <Text>{moment(tweet.created_at).format("hh:mm A")}</Text>
-                <Text css={{ mx: "$1" }}>·</Text>
-                <Text>{moment(tweet.created_at).format("d MMM yyyy")}</Text>
-                <Text css={{ mx: "$1" }}>·</Text>
-                <Text>{tweet.source}</Text>
+                <Text size="2">
+                  <span>{moment(tweet.created_at).format("hh:mm A")}</span>
+                  <Box as="span" css={{ mx: "$1" }}>·</Box>
+                  <span>{moment(tweet.created_at).format("d MMM yyyy")}</span>
+                  <Box as="span" css={{ mx: "$1" }}>·</Box>
+                  <span>{tweet.source}</span>
+                </Text>
               </Flex>
             </Box>
           </Container>
