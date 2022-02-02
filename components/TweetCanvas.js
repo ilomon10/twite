@@ -19,6 +19,9 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef }) => {
     setScale(null);
     const canvasHeight = canvasRef.current.clientHeight;
     const contentHeight = contentRef.current.clientHeight;
+
+    if (window.innerWidth < 467) return;
+    
     let factor;
     if (canvasHeight > contentHeight) {
       factor = canvasHeight - contentHeight;
