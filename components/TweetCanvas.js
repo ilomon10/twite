@@ -5,7 +5,6 @@ import { Flex } from "./Flex"
 import { VerifiedBadge } from "./VerifiedBadge"
 import { Container } from "./Container"
 import { Paragraph } from "./Paragraph"
-import Image from "next/image"
 
 import moment from "moment"
 import { AspectRatio } from "@radix-ui/react-aspect-ratio"
@@ -133,10 +132,12 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef, options }) => {
                       as={AspectRatio}
                       ratio={media.width / media.height}
                     >
-                      <Image
-                        height={media.height}
-                        width={media.width}
-                        layout="fill"
+                      <Box as="img"
+                        css={{
+                          objectFit: "cover",
+                          width: "100%",
+                          height: "100%"
+                        }}
                         src={media.url}
                         alt={tweet.name}
                       />

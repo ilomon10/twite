@@ -21,15 +21,13 @@ import { tweetProcessor } from "./tweetProcessor"
 
 const separator = match("/:username/status/:tweetId");
 
-// const defaultUrl = "https://twitter.com/Jack/status/20";
-const defaultUrl = "https://twitter.com/usssks/status/1495837639420882951";
+const defaultUrl = "https://twitter.com/Jack/status/20";
 
 export const TweetLoader = () => {
   const canvasRef = useRef(null);
 
-  // const [url, setUrl] = useState("https://twitter.com/Jack/status/20");
   const [url, setUrl] = useState(defaultUrl);
-  const [tweetId, setTweetId] = useState("1495837639420882951");
+  const [tweetId, setTweetId] = useState("20");
   const [loading, setLoading] = useState(false);
   const [tweet, setTweet] = useState(null);
   const [ratio, setRatio] = useState(1);
@@ -68,7 +66,7 @@ export const TweetLoader = () => {
         }
       }
 
-      tweet.data.text = tweetProcessor(text, tweet.data.urls);
+      tweet.data.text = tweetProcessor(text, tweet.data.urls, { tcl });
       if (tweet.data.quote) {
         for (let quote of tweet.data.quote) {
           quote.text = tweetProcessor(quote.text, quote.urls, {

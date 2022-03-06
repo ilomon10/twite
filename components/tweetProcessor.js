@@ -1,7 +1,7 @@
 import ReactDOMServer from "react-dom/server"
 import { Link } from "./Link"
 
-const Anchor = ({ text, href, variant = "blue", title }) => {
+const Anchor = ({ text, href, variant, title }) => {
   return (<Link variant={variant} href={href} title={title}>{text}</Link>);
 }
 
@@ -26,7 +26,7 @@ export const tweetProcessor = (text, urls, options) => {
           let anchor = ReactDOMServer.renderToString(Anchor({
             text: displayText,
             href: url,
-            variant: !highlight && ""
+            variant: highlight && "blue"
           }));
           text = text.replace(displayText, anchor);
         });

@@ -2,6 +2,7 @@ import axios from "axios"
 
 const tweetProcessor = (data, includes) => {
   const user = includes.users.find(u => u.id === data.author_id);
+  const quote = data.referenced_tweets && data.referenced_tweets.filter((tweet) => tweet.type === "quoted")
   return {
     id: data.id,
     text: data.text,
@@ -10,7 +11,7 @@ const tweetProcessor = (data, includes) => {
     source: data.source,
 
     urls: data.entities && data.entities.urls,
-    quote: data.referenced_tweets && data.referenced_tweets
+    quote: (quote && quote.length > 0) && quote
       .map((refTweet) => includes.tweets.find((tweet) => refTweet.id === tweet.id))
       .map((tweet) => {
         return tweetProcessor(tweet, includes);
@@ -50,7 +51,6 @@ export default async function handler(req, res) {
       }
     });
     const { data, includes } = raw.data;
-    console.log(data, includes);
     const tweet = tweetProcessor(data, includes);
     res.status(raw.status).json(tweet);
   } catch (err) {
