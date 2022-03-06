@@ -1,5 +1,33 @@
 import axios from "axios"
 
+const tweetProcessor = (data, includes) => {
+  const user = includes.users.find(u => u.id === data.author_id);
+  return {
+    id: data.id,
+    text: data.text,
+    media: includes.media,
+    created_at: data.created_at,
+    source: data.source,
+
+    urls: data.entities && data.entities.urls,
+    quote: data.referenced_tweets && data.referenced_tweets
+      .map((refTweet) => includes.tweets.find((tweet) => refTweet.id === tweet.id))
+      .map((tweet) => {
+        return tweetProcessor(tweet, includes);
+      }),
+
+    name: user.name,
+    username: user.username,
+    profile_image_url: user.profile_image_url,
+    verified: user.verified,
+
+    retweet_count: data.public_metrics.retweet_count,
+    reply_count: data.public_metrics.reply_count,
+    like_count: data.public_metrics.like_count,
+
+  }
+}
+
 
 const http = axios.create({
   baseURL: "https://api.twitter.com/",
@@ -11,39 +39,22 @@ const http = axios.create({
 export default async function handler(req, res) {
   const { id } = req.query;
   try {
-    const tweet = await http.request({
+    const raw = await http.request({
       url: `2/tweets/${id}`,
       method: "get",
       params: {
-        "tweet.fields": "created_at,source,public_metrics,context_annotations,entities",
-        "expansions": "attachments.media_keys,author_id,attachments.poll_ids",
+        "tweet.fields": "created_at,source,public_metrics,context_annotations,entities,referenced_tweets",
+        "expansions": "attachments.media_keys,author_id,attachments.poll_ids,referenced_tweets.id.author_id",
         "user.fields": "profile_image_url,verified",
         "media.fields": "media_key,url,height,width,preview_image_url,alt_text"
       }
     });
-    const { data, includes } = tweet.data;
-    
-    res.status(tweet.status).json({
-      id: data.id,
-      text: data.text,
-      media: includes.media,
-      created_at: data.created_at,
-      source: data.source,
-
-      urls: data.entities && data.entities.urls,
-
-      name: includes.users[0].name,
-      username: includes.users[0].username,
-      profile_image_url: includes.users[0].profile_image_url,
-      verified: includes.users[0].verified,
-
-      retweet_count: data.public_metrics.retweet_count,
-      reply_count: data.public_metrics.reply_count,
-      like_count: data.public_metrics.like_count,
-
-    });
+    const { data, includes } = raw.data;
+    console.log(data, includes);
+    const tweet = tweetProcessor(data, includes);
+    res.status(raw.status).json(tweet);
   } catch (err) {
     console.error(err);
-    res.status(401).json({ text: "error" });
+    res.status(500).json({ text: "error" });
   }
 }

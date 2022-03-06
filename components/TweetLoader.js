@@ -4,10 +4,8 @@ import { TextField } from "./TextField"
 import { match } from "path-to-regexp"
 import axios from "axios"
 import { Container } from "./Container"
-import { Link } from "./Link"
 import { CameraIcon, MagnifyingGlassIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons"
 
-import ReactDOMServer from "react-dom/server"
 import { useDebouncedCallback } from "use-debounce"
 import { ControlGroup } from "./ControlGroup"
 import { Button } from "./Button"
@@ -19,22 +17,19 @@ import { IconButton } from "./IconButton"
 import { toPng } from "html-to-image"
 import { Switch } from "./Switch"
 import { Badge } from "./Badge"
+import { tweetProcessor } from "./tweetProcessor"
 
 const separator = match("/:username/status/:tweetId");
 
-const Anchor = ({ text, href }) => {
-  return (<Link variant="blue" href={href}>{text}</Link>);
-}
-
 // const defaultUrl = "https://twitter.com/Jack/status/20";
-const defaultUrl = "https://twitter.com/koskila/status/1445710003147399173";
+const defaultUrl = "https://twitter.com/usssks/status/1495837639420882951";
 
 export const TweetLoader = () => {
   const canvasRef = useRef(null);
 
   // const [url, setUrl] = useState("https://twitter.com/Jack/status/20");
   const [url, setUrl] = useState(defaultUrl);
-  const [tweetId, setTweetId] = useState("1445710003147399173");
+  const [tweetId, setTweetId] = useState("1495837639420882951");
   const [loading, setLoading] = useState(false);
   const [tweet, setTweet] = useState(null);
   const [ratio, setRatio] = useState(1);
@@ -48,7 +43,6 @@ export const TweetLoader = () => {
     try {
       const uri = new URL(e.target.value);
       const tweetUrl = separator(uri.pathname);
-      console.log(tweetUrl);
       setTweetId(tweetUrl.params["tweetId"]);
     } catch (err) {
       console.error(err);
@@ -74,32 +68,14 @@ export const TweetLoader = () => {
         }
       }
 
-      try {
-        for (let sectionKey in tcl.regex) {
-          const matches = text.match(tcl.regex[sectionKey]);
-          if (matches === null) continue;
-          matches.map((displayText) => {
-            let url = `https://twitter.com/${displayText.substring(1)}`;
-            if (displayText[0] === "#") {
-              url = `https://twitter.com/hashtag/${displayText.substring(1)}`
-            }
-            let anchor = ReactDOMServer.renderToString(Anchor({
-              text: displayText,
-              href: url
-            }));
-            text = text.replace(displayText, anchor);
-          });
+      tweet.data.text = tweetProcessor(text, tweet.data.urls);
+      if (tweet.data.quote) {
+        for (let quote of tweet.data.quote) {
+          quote.text = tweetProcessor(quote.text, quote.urls, {
+            keepLastUrl: true
+          })
         }
-        tweet.data.urls.map(({ display_url, url }, idx) => {
-          let anchor = ReactDOMServer.renderToString(Anchor({ text: display_url, href: url }));
-          if (idx === tweet.data.urls.length - 1) anchor = "";
-          text = text.replace(url, anchor);
-        });
-      } catch (err) {
-        // do nothing
       }
-
-      tweet.data.text = text;
 
       if (tweet.data.media) {
         for (let media of tweet.data.media) {
@@ -108,14 +84,12 @@ export const TweetLoader = () => {
           }
         }
       }
-      console.log(tweet.data);
 
       setTweet(tweet.data);
     } catch (err) {
       // do nothing
     }
     setLoading(false);
-    console.log(loading);
   }, 100);
 
   const onKeyPress = useCallback((e) => {

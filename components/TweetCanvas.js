@@ -81,6 +81,44 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef, options }) => {
                   dangerouslySetInnerHTML={{ __html: tweet.text }}
                 />
               </Box>
+              {tweet.quote && tweet.quote.map((quote) => {
+                return (
+                  <Box
+                    key={quote.id}
+                    css={{
+                      p: "$2",
+                      border: "1px solid $slate6",
+                      borderRadius: "$3",
+                      overflow: "hidden"
+                    }}
+                  >
+                    <Flex align="center" css={{ mb: "$1" }}>
+                      <Box>
+                        <Avatar size="1" src={quote.profile_image_url} />
+                      </Box>
+                      <Flex css={{ ml: "$1" }}>
+                        <Text size="2" css={{ fontWeight: "bold", lineHeight: "16px" }}>{quote.name}</Text>
+                        {(quote.verified === true || options.forceVerified) &&
+                          <VerifiedBadge css={{ ml: "$1" }} />}
+                        <Text size="2">@{quote.username}</Text>
+                        <Text size="2">
+                          <Box as="span" css={{ mx: "$1" }}>·</Box>
+                          <span>{moment(tweet.created_at).format(`D MMM${moment(tweet.created_at).year() < moment().year() ? "YYYY" : ""}`)}</span>
+                        </Text>
+                      </Flex>
+                    </Flex>
+                    <Box>
+                      <Paragraph
+                        size={0}
+                        css={{
+                          whiteSpace: "pre-line"
+                        }}
+                        dangerouslySetInnerHTML={{ __html: quote.text }}
+                      />
+                    </Box>
+                  </Box>
+                )
+              })}
               {tweet.media && tweet.media.map((media) => {
                 return (
                   <Box
@@ -116,7 +154,7 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef, options }) => {
                 <Text size="2">
                   <span>{moment(tweet.created_at).format("hh:mm A")}</span>
                   <Box as="span" css={{ mx: "$1" }}>·</Box>
-                  <span>{moment(tweet.created_at).format("d MMM yyyy")}</span>
+                  <span>{moment(tweet.created_at).format("D MMM yyyy")}</span>
                   <Box as="span" css={{ mx: "$1" }}>·</Box>
                   <span>{tweet.source}</span>
                 </Text>
@@ -125,6 +163,6 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef, options }) => {
           </Container>
         </Flex>
       </AspectRatio>
-    </Container>
+    </Container >
   )
 }
