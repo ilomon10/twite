@@ -26,11 +26,15 @@ const Anchor = ({ text, href }) => {
   return (<Link variant="blue" href={href}>{text}</Link>);
 }
 
+// const defaultUrl = "https://twitter.com/Jack/status/20";
+const defaultUrl = "https://twitter.com/koskila/status/1445710003147399173";
+
 export const TweetLoader = () => {
   const canvasRef = useRef(null);
 
-  const [url, setUrl] = useState("https://twitter.com/Jack/status/20");
-  const [tweetId, setTweetId] = useState("20");
+  // const [url, setUrl] = useState("https://twitter.com/Jack/status/20");
+  const [url, setUrl] = useState(defaultUrl);
+  const [tweetId, setTweetId] = useState("1445710003147399173");
   const [loading, setLoading] = useState(false);
   const [tweet, setTweet] = useState(null);
   const [ratio, setRatio] = useState(1);
@@ -96,6 +100,15 @@ export const TweetLoader = () => {
       }
 
       tweet.data.text = text;
+
+      if (tweet.data.media) {
+        for (let media of tweet.data.media) {
+          if (["animated_gif", "video"].indexOf(media.type) >= 0) {
+            media.url = media.preview_image_url;
+          }
+        }
+      }
+      console.log(tweet.data);
 
       setTweet(tweet.data);
     } catch (err) {
@@ -177,7 +190,7 @@ export const TweetLoader = () => {
                     setOptions(opt => ({ ...opt, forceVerified: e }));
                   }}
                 />
-                <Text as="label" for="force-verified" css={{ ml: "$2" }}>Force verified</Text>
+                <Text as="label" htmlFor="force-verified" css={{ ml: "$2" }}>Force verified</Text>
               </Flex>
             </Flex>
             <Flex align="center" justify={"between"}>

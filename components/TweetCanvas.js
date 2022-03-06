@@ -88,19 +88,21 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef, options }) => {
                     css={{
                       border: "1px solid $slate6",
                       borderRadius: "$3",
-                      overflow: "hidden",
-                      "> span": {
-                        display: "block !important",
-                        borderRadius: "$2",
-                      }
+                      overflow: "hidden"
                     }}
                   >
-                    <Image
-                      height={media.height}
-                      width={media.width}
-                      src={media.type === "video" ? media.preview_image_url : media.url}
-                      alt={tweet.name}
-                    />
+                    <Box
+                      as={AspectRatio}
+                      ratio={media.width / media.height}
+                    >
+                      <Image
+                        height={media.height}
+                        width={media.width}
+                        layout="fill"
+                        src={media.url}
+                        alt={tweet.name}
+                      />
+                    </Box>
                   </Box>
                 )
               })}
