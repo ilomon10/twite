@@ -120,11 +120,11 @@ export const TweetCanvasMedia = ({ tweet }) => {
       result = (tweet.media.map((media) => {
         return (
           <Box
+            key={media.media_key}
             as={AspectRatio}
             ratio={media.width / media.height}
           >
             <MediaPreview
-              key={media.media_key}
               media={media}
               name={tweet.name}
             />

@@ -118,7 +118,7 @@ export const TweetLoader = () => {
 
   useEffect(() => {
     fetch(tweetId);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Box>
