@@ -9,6 +9,7 @@ import { Paragraph } from "./Paragraph"
 import moment from "moment"
 import { AspectRatio } from "@radix-ui/react-aspect-ratio"
 import { useEffect, useRef, useState } from "react"
+import { TweetCanvasMedia } from "./TweetCanvasMedia"
 
 export const TweetCanvas = ({ tweet, ratio, canvasRef, options }) => {
   const contentRef = useRef(null);
@@ -24,9 +25,13 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef, options }) => {
     let factor;
 
     if (contentHeight > contentWidth) {
-      factor = contentHeight > canvasHeight ? canvasHeight / contentHeight : canvasHeight / contentHeight;
+      factor = contentHeight > canvasHeight
+        ? canvasHeight / contentHeight
+        : contentHeight / canvasHeight;
     } else {
-      factor = contentWidth > canvasWidth ? canvasWidth / contentWidth : canvasWidth / contentWidth;
+      factor = contentWidth > canvasWidth
+        ? canvasWidth / contentWidth
+        : contentWidth / canvasWidth;
     }
     factor = factor * 100;
 
@@ -34,7 +39,7 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef, options }) => {
   }, [ratio, canvasRef]);
 
   return (
-    <Container size="2" css={{ mb: "$4" }}>
+    <Container size="1" css={{ mb: "$8" }}>
       <AspectRatio ratio={ratio} asChild={true} ref={canvasRef}>
         <Flex
           align="center"
@@ -43,7 +48,8 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef, options }) => {
             overflow: "hidden",
             backgroundColor: "white",
             borderRadius: "$3",
-            border: "1px solid $slate5"
+            border: "1px solid $slate5",
+            boxShadow: "0px 0px 50px -25px var(--colors-shadowDark)"
           }}
         >
           <Container
@@ -93,11 +99,11 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef, options }) => {
                       <Box>
                         <Avatar size="1" src={quote.profile_image_url} />
                       </Box>
-                      <Flex css={{ ml: "$1" }}>
+                      <Flex css={{ ml: "$1", alignItems: "center" }}>
                         <Text size="2" css={{ fontWeight: "bold", lineHeight: "16px" }}>{quote.name}</Text>
                         {(quote.verified === true || options.forceVerified) &&
                           <VerifiedBadge css={{ ml: "$1" }} />}
-                        <Text size="2">@{quote.username}</Text>
+                        <Text size="2" css={{ ml: "$1" }}>@{quote.username}</Text>
                         <Text size="2">
                           <Box as="span" css={{ mx: "$1" }}>·</Box>
                           <span>{moment(tweet.created_at).format(`D MMM${moment(tweet.created_at).year() < moment().year() ? "YYYY" : ""}`)}</span>
@@ -106,7 +112,7 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef, options }) => {
                     </Flex>
                     <Box>
                       <Paragraph
-                        size={0}
+                        size="0"
                         css={{
                           whiteSpace: "pre-line"
                         }}
@@ -116,33 +122,8 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef, options }) => {
                   </Box>
                 )
               })}
-              {tweet.media && tweet.media.map((media) => {
-                return (
-                  <Box
-                    key={media.media_key}
-                    css={{
-                      border: "1px solid $slate6",
-                      borderRadius: "$3",
-                      overflow: "hidden"
-                    }}
-                  >
-                    <Box
-                      as={AspectRatio}
-                      ratio={media.width / media.height}
-                    >
-                      <Box as="img"
-                        css={{
-                          objectFit: "cover",
-                          width: "100%",
-                          height: "100%"
-                        }}
-                        src={media.url}
-                        alt={tweet.name}
-                      />
-                    </Box>
-                  </Box>
-                )
-              })}
+              {tweet.media &&
+                <TweetCanvasMedia tweet={tweet} />}
               <Flex
                 align="center"
                 css={{
