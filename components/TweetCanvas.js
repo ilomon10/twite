@@ -17,21 +17,18 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef, options }) => {
   useEffect(() => {
     setScale(null);
     const canvasHeight = canvasRef.current.clientHeight;
+    const canvasWidth = canvasRef.current.clientWidth;
     const contentHeight = contentRef.current.clientHeight;
-
-    if (window.innerWidth < 467) return;
+    const contentWidth = contentRef.current.clientWidth;
 
     let factor;
-    if (canvasHeight > contentHeight) {
-      factor = canvasHeight - contentHeight;
-      factor = (factor / canvasHeight) * 100;
-      factor = 100 + factor;
-      if (factor > 150) factor = 150;
+
+    if (contentHeight > contentWidth) {
+      factor = contentHeight > canvasHeight ? canvasHeight / contentHeight : canvasHeight / contentHeight;
     } else {
-      factor = (contentHeight / canvasHeight) * 100;
-      factor = 100 - factor;
-      factor = 100 + factor;
+      factor = contentWidth > canvasWidth ? canvasWidth / contentWidth : canvasWidth / contentWidth;
     }
+    factor = factor * 100;
 
     setScale(factor / 100);
   }, [ratio, canvasRef]);
@@ -41,6 +38,7 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef, options }) => {
       <AspectRatio ratio={ratio} asChild={true} ref={canvasRef}>
         <Flex
           align="center"
+          justify="center"
           css={{
             overflow: "hidden",
             backgroundColor: "white",
@@ -51,7 +49,7 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef, options }) => {
           <Container
             ref={contentRef}
             css={{
-              maxWidth: "467px"
+              maxWidth: "467px",
             }}
           >
             <Box css={{
