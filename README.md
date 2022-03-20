@@ -4,21 +4,59 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+First, add Twitter API key:
+
+```env
+# .env.local
+TWITTER_ACCESS_TOKEN = CHANGE_THIS_WITH_TWITTER_API_KEY
+```
+
+Then, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## API Routes
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+### **GET**: Tweet
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+`http://localhost:3000/api/tweet/[tweet_id]`
+
+Return value:
+
+```json
+{
+  "id": "string",
+  "text": "string",
+  "media": [{
+    "type": "enum",
+    "height": "number",
+    "width": "number",
+    "preview_image_url": "string",
+    "media_key": "string",
+  }],
+  "created_at": "date",
+  "source": "string",
+  "urls": [{
+    "start": "number",
+    "display_url": "string",
+    "expanded_url": "string",
+    "url": "string",
+    "end": "number"
+  }],
+  "name": "string",
+  "username": "string",
+  "profile_image_url": "string",
+  "verified": "boolean",
+  "retweet_count": "number",
+  "reply_count": "number",
+  "like_count": "number"
+}
+```
+
 
 ## Learn More
 
