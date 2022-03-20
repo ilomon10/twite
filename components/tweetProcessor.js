@@ -14,6 +14,20 @@ export const tweetProcessor = (text, urls, options) => {
   }
   let { tcl, highlight, keepLastUrl } = opts;
   try {
+    const urlsInText = text.match(/(https?:\/\/[^\s]+)/g);
+    if (urlsInText) {
+      for (let [index, url] of urlsInText.entries()) {
+        const u = urls.find(u => u.url === url);
+        let anchor = ReactDOMServer.renderToString(Anchor({
+          text: u.display_url,
+          href: u.url,
+          variant: highlight && "blue",
+          title: u.expanded_url
+        }));
+        if (!keepLastUrl) if (index === urlsInText.length - 1) anchor = "";
+        text = text.replace(url, anchor);
+      }
+    }
     if (tcl !== null) {
       for (let sectionKey in tcl.regex) {
         const matches = text.match(tcl.regex[sectionKey]);
@@ -32,18 +46,12 @@ export const tweetProcessor = (text, urls, options) => {
         });
       }
     }
-    urls.map(({ display_url, url, expanded_url }, idx) => {
-      let anchor = ReactDOMServer.renderToString(Anchor({
-        text: display_url,
-        href: url,
-        variant: !highlight && "",
-        title: expanded_url
-      }));
-      if (!keepLastUrl) if (idx === urls.length - 1) anchor = "";
-      text = text.replace(url, anchor);
-    });
   } catch (err) {
-    // do nothing
+    if (process.env.NODE_ENV === "development") {
+      console.error(err.message);
+    } else {
+      // do nothing
+    }
   }
 
   return text;

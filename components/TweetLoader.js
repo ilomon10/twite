@@ -66,7 +66,10 @@ export const TweetLoader = () => {
         }
       }
 
-      tweet.data.text = tweetProcessor(text, tweet.data.urls, { tcl });
+      tweet.data.text = tweetProcessor(text, tweet.data.urls, {
+        tcl,
+        highlight: true
+      });
       if (tweet.data.quote) {
         for (let quote of tweet.data.quote) {
           quote.text = tweetProcessor(quote.text, quote.urls, {

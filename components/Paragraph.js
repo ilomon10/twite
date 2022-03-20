@@ -12,14 +12,14 @@ export const Paragraph = React.forwardRef(
 
     // This is the mapping of Paragraph Variants to Text variants
     const textSize = {
-      0: { '@initial': '2', '@bp2': '2' },
+      0: { '@initial': '2', '@bp2': '3' },
       1: { '@initial': '3', '@bp2': '4' },
       2: { '@initial': '5', '@bp2': '6' },
     };
 
     // This is the mapping of Paragraph Variants to Text css
     const textCss = {
-      0: { lineHeight: '13px', '@bp2': { lineHeight: '19px' } },
+      0: { lineHeight: '19px' },
       1: { lineHeight: '25px', '@bp2': { lineHeight: '27px' } },
       2: { color: '$slate11', lineHeight: '27px', '@bp2': { lineHeight: '30px' } },
     };
