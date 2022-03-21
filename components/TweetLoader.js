@@ -33,7 +33,9 @@ export const TweetLoader = () => {
   const [ratio, setRatio] = useState(1);
   const [options, setOptions] = useState({
     forceVerified: false,
-    darkMode: false
+    darkMode: false,
+    keepLastUrl: true,
+    removeSource: false,
   })
 
   const onChange = useCallback((e) => {
@@ -68,7 +70,8 @@ export const TweetLoader = () => {
 
       tweet.data.text = tweetProcessor(text, tweet.data.urls, {
         tcl,
-        highlight: true
+        highlight: true,
+        keepLastUrl: options.keepLastUrl
       });
       if (tweet.data.quote) {
         for (let quote of tweet.data.quote) {
@@ -118,7 +121,7 @@ export const TweetLoader = () => {
 
   useEffect(() => {
     fetch(tweetId);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [options["keepLastUrl"]]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Box>
@@ -141,8 +144,8 @@ export const TweetLoader = () => {
         </ControlGroup>
         {tweet &&
           <Box css={{ mb: "$4" }}>
-            <Flex align="center" justify={"between"} css={{ mb: "$4" }}>
-              <Box>
+            <Flex align="center" css={{ mb: "$4" }}>
+              <Box css={{ flexGrow: 1 }}>
                 <ControlGroup>
                   <Button
                     variant={ratio === 1 ? "blue" : "gray"}
@@ -158,15 +161,37 @@ export const TweetLoader = () => {
                   >9:16 Stories</Button>
                 </ControlGroup>
               </Box>
-              <Flex>
+              <Box>
                 <Switch
                   id="force-verified"
                   onCheckedChange={(e) => {
                     setOptions(opt => ({ ...opt, forceVerified: e }));
                   }}
                 />
-                <Text as="label" htmlFor="force-verified" css={{ ml: "$2" }}>Force verified</Text>
-              </Flex>
+                <Text as="label" htmlFor="force-verified" css={{ display: "inline-block", ml: "$2" }}>Force verified</Text>
+              </Box>
+            </Flex>
+            <Flex css={{ mb: "$4" }}>
+              <Box css={{ mr: "$4" }}>
+                <Switch
+                  id="remove-source"
+                  checked={options.removeSource}
+                  onCheckedChange={(e) => {
+                    setOptions(opt => ({ ...opt, removeSource: e }));
+                  }}
+                />
+                <Text as="label" htmlFor="remove-source" css={{ display: "inline-block", ml: "$2" }}>Remove Source</Text>
+              </Box>
+              <Box>
+                <Switch
+                  id="keep-last-link"
+                  checked={options.keepLastUrl}
+                  onCheckedChange={(e) => {
+                    setOptions(opt => ({ ...opt, keepLastUrl: e }));
+                  }}
+                />
+                <Text as="label" htmlFor="keep-last-link" css={{ display: "inline-block", ml: "$2" }}>Keep Last Url</Text>
+              </Box>
             </Flex>
             <Flex align="center" justify={"between"}>
               <Flex align="center">
