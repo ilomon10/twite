@@ -35,7 +35,8 @@ export const TweetLoader = () => {
     forceVerified: false,
     darkMode: false,
     keepLastUrl: true,
-    removeSource: false,
+    time: true,
+    source: true,
   })
 
   const onChange = useCallback((e) => {
@@ -161,7 +162,9 @@ export const TweetLoader = () => {
                   >9:16 Stories</Button>
                 </ControlGroup>
               </Box>
-              <Box>
+            </Flex>
+            <Flex css={{ mb: "$4" }}>
+              <Box css={{ mr: "$4" }}>
                 <Switch
                   id="force-verified"
                   onCheckedChange={(e) => {
@@ -170,27 +173,25 @@ export const TweetLoader = () => {
                 />
                 <Text as="label" htmlFor="force-verified" css={{ display: "inline-block", ml: "$2" }}>Force verified</Text>
               </Box>
-            </Flex>
-            <Flex css={{ mb: "$4" }}>
               <Box css={{ mr: "$4" }}>
                 <Switch
-                  id="remove-source"
-                  checked={options.removeSource}
+                  id="f-source"
+                  checked={options.source}
                   onCheckedChange={(e) => {
-                    setOptions(opt => ({ ...opt, removeSource: e }));
+                    setOptions(opt => ({ ...opt, source: e }));
                   }}
                 />
-                <Text as="label" htmlFor="remove-source" css={{ display: "inline-block", ml: "$2" }}>Remove Source</Text>
+                <Text as="label" htmlFor="f-source" css={{ display: "inline-block", ml: "$2" }}>Source</Text>
               </Box>
               <Box>
                 <Switch
-                  id="keep-last-link"
-                  checked={options.keepLastUrl}
+                  id="f-time"
+                  checked={options.time}
                   onCheckedChange={(e) => {
-                    setOptions(opt => ({ ...opt, keepLastUrl: e }));
+                    setOptions(opt => ({ ...opt, time: e }));
                   }}
                 />
-                <Text as="label" htmlFor="keep-last-link" css={{ display: "inline-block", ml: "$2" }}>Keep Last Url</Text>
+                <Text as="label" htmlFor="f-time" css={{ display: "inline-block", ml: "$2" }}>Time</Text>
               </Box>
             </Flex>
             <Flex align="center" justify={"between"}>

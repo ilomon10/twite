@@ -55,7 +55,7 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef, options }) => {
           <Container
             ref={contentRef}
             css={{
-              maxWidth: "467px",
+              maxWidth: "570px",
             }}
           >
             <Box css={{
@@ -132,14 +132,16 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef, options }) => {
                 }}
               >
                 <Text size="2">
-                  <span>{moment(tweet.created_at).format("hh:mm A")}</span>
-                  <Box as="span" css={{ mx: "$1" }}>·</Box>
-                  <span>{moment(tweet.created_at).format("D MMM yyyy")}</span>
-                  {!options.removeSource &&
+                  {options.time &&
                     <>
+                      <span>{moment(tweet.created_at).format("hh:mm A")}</span>
                       <Box as="span" css={{ mx: "$1" }}>·</Box>
-                      <span>{tweet.source}</span>
+                      <span>{moment(tweet.created_at).format("D MMM yyyy")}</span>
                     </>}
+                  {options.time && options.source &&
+                    <Box as="span" css={{ mx: "$1" }}>·</Box>}
+                  {options.source &&
+                    <span>{tweet.source}</span>}
                 </Text>
               </Flex>
             </Box>
