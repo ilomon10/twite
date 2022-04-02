@@ -55,7 +55,8 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef, options }) => {
           <Container
             ref={contentRef}
             css={{
-              maxWidth: "570px"
+              maxWidth: "570px",
+              position: "relative"
             }}
           >
             <Box css={{
@@ -70,7 +71,7 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef, options }) => {
                 <Box css={{ ml: "$2" }}>
                   <Flex>
                     <Text size="3" css={{ fontWeight: "bold", lineHeight: "16px" }}>{tweet.name}</Text>
-                    {(tweet.verified === true || options.forceVerified) &&
+                    {(options.verified) &&
                       <VerifiedBadge css={{ ml: "$1" }} />}
                   </Flex>
                   <Text size="3">@{tweet.username}</Text>
@@ -151,6 +152,52 @@ export const TweetCanvas = ({ tweet, ratio, canvasRef, options }) => {
               </Box>
             </Box>
           </Container>
+          {options.watermark &&
+            <Box css={{
+              position: "absolute",
+              top: 0,
+              left: "50%",
+              transform: "translateX(-50%)",
+              "&:before": {
+                content: '""',
+                position: "absolute",
+                top: "100%",
+                left: 9,
+                right: 9,
+                backgroundColor: "$slate7",
+                height: 10,
+                borderRadius: "0 0 $2 $2"
+              }
+            }}>
+              <Box css={{
+                backgroundColor: "$slate7",
+                py: 5,
+                px: 16,
+                color: "white",
+                fontSize: "$1",
+                "&:before, &:after": {
+                  width: 10,
+                  content: '""',
+                  position: "absolute",
+                  top: 0,
+                  bottom: 0,
+                  backgroundColor: "white"
+                },
+                "&:before": {
+                  borderRadius: "0 50% 0 0",
+                  left: -1,
+                },
+                "&:after": {
+                  borderRadius: "50% 0 0 0",
+                  right: -1,
+                }
+              }} >
+                <Box css={{
+                  position: "relative",
+                  mb: -10
+                }}>Snap with <Box as="span" css={{ fontWeight: "bold" }}>TWITE</Box></Box>
+              </Box>
+            </Box>}
         </Flex>
       </AspectRatio>
     </Container >

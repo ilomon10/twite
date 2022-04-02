@@ -32,11 +32,12 @@ export const TweetLoader = () => {
   const [tweet, setTweet] = useState(null);
   const [ratio, setRatio] = useState(1);
   const [options, setOptions] = useState({
-    forceVerified: false,
+    verified: false,
     darkMode: false,
     keepLastUrl: true,
     time: true,
     source: true,
+    watermark: true,
   })
 
   const onChange = useCallback((e) => {
@@ -89,6 +90,8 @@ export const TweetLoader = () => {
           }
         }
       }
+
+      setOptions(opt => ({ ...opt, verified: tweet.data.verified }))
 
       setTweet(tweet.data);
     } catch (err) {
@@ -163,36 +166,23 @@ export const TweetLoader = () => {
                 </ControlGroup>
               </Box>
             </Flex>
-            <Flex css={{ mb: "$4" }}>
-              <Flex align={"center"} css={{ mr: "$4" }}>
-                <Switch
-                  id="force-verified"
-                  onCheckedChange={(e) => {
-                    setOptions(opt => ({ ...opt, forceVerified: e }));
-                  }}
-                />
-                <Text as="label" htmlFor="force-verified" css={{ display: "inline-block", ml: "$2" }}>Force verified</Text>
-              </Flex>
-              <Flex align={"center"} css={{ mr: "$4" }}>
-                <Switch
-                  id="f-source"
-                  checked={options.source}
-                  onCheckedChange={(e) => {
-                    setOptions(opt => ({ ...opt, source: e }));
-                  }}
-                />
-                <Text as="label" htmlFor="f-source" css={{ display: "inline-block", ml: "$2" }}>Source</Text>
-              </Flex>
-              <Flex align={"center"}>
-                <Switch
-                  id="f-time"
-                  checked={options.time}
-                  onCheckedChange={(e) => {
-                    setOptions(opt => ({ ...opt, time: e }));
-                  }}
-                />
-                <Text as="label" htmlFor="f-time" css={{ display: "inline-block", ml: "$2" }}>Time</Text>
-              </Flex>
+            <Flex wrap={"wrap"} css={{ mb: "$4" }}>
+              {[
+                { label: "Verified", name: "verified" },
+                { label: "Source", name: "source" },
+                { label: "Time", name: "time" },
+                { label: "Watermark", name: "watermark" },
+              ].map(({ label, name }) =>
+                <Flex align={"center"} css={{ pr: "$3", mb: "$3" }}>
+                  <Switch
+                    id={`f-${name}`}
+                    checked={options[name]}
+                    onCheckedChange={(e) => {
+                      setOptions(opt => ({ ...opt, [name]: e }));
+                    }}
+                  />
+                  <Text as="label" htmlFor={`f-${name}`} css={{ display: "inline-block", ml: "$2" }}>{label}</Text>
+                </Flex>)}
             </Flex>
             <Flex align="center" justify={"between"}>
               <Flex align="center">
