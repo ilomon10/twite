@@ -19,15 +19,25 @@ export const tweetProcessor = (text, urls, options) => {
       for (let [index, url] of urlsInText.entries()) {
         const u = urls.find(u => u.url === url);
         let anchor = "";
-        if (u.display_url.indexOf("pic.twitter.com") === -1) {
-          anchor = ReactDOMServer.renderToString(Anchor({
-            text: u.display_url,
-            href: u.url,
-            variant: highlight && "blue",
-            title: u.expanded_url
-          }));
+        anchor = ReactDOMServer.renderToString(Anchor({
+          text: u.display_url,
+          href: u.url,
+          variant: highlight && "blue",
+          title: u.expanded_url
+        }));
+
+        if (index === urlsInText.length - 1) {
+          if (
+            ["twitter.com", "pic.twitter.com"].reduce((p, c) => {
+              if (p) return p;
+              p = (u.display_url.indexOf(c) > -1);
+              return p;
+            }, false)
+          ) {
+            anchor = "";
+          }
         }
-        if (!keepLastUrl) if (index === urlsInText.length - 1) anchor = "";
+
         text = text.replace(url, anchor);
       }
     }

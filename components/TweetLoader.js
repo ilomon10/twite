@@ -166,6 +166,7 @@ export const TweetLoader = () => {
                 </ControlGroup>
               </Box>
             </Flex>
+            <Box css={{ mb: "$2" }}>Attributes</Box>
             <Flex wrap={"wrap"} css={{ mb: "$4" }}>
               {[
                 { label: "Verified", name: "verified" },
