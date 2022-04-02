@@ -174,7 +174,7 @@ export const TweetLoader = () => {
                 { label: "Time", name: "time" },
                 { label: "Watermark", name: "watermark" },
               ].map(({ label, name }) =>
-                <Flex align={"center"} css={{ pr: "$3", mb: "$3" }}>
+                <Flex key={name} align={"center"} css={{ pr: "$3", mb: "$3" }}>
                   <Switch
                     id={`f-${name}`}
                     checked={options[name]}
