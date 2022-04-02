@@ -164,7 +164,7 @@ export const TweetLoader = () => {
               </Box>
             </Flex>
             <Flex css={{ mb: "$4" }}>
-              <Box css={{ mr: "$4" }}>
+              <Flex align={"center"} css={{ mr: "$4" }}>
                 <Switch
                   id="force-verified"
                   onCheckedChange={(e) => {
@@ -172,8 +172,8 @@ export const TweetLoader = () => {
                   }}
                 />
                 <Text as="label" htmlFor="force-verified" css={{ display: "inline-block", ml: "$2" }}>Force verified</Text>
-              </Box>
-              <Box css={{ mr: "$4" }}>
+              </Flex>
+              <Flex align={"center"} css={{ mr: "$4" }}>
                 <Switch
                   id="f-source"
                   checked={options.source}
@@ -182,8 +182,8 @@ export const TweetLoader = () => {
                   }}
                 />
                 <Text as="label" htmlFor="f-source" css={{ display: "inline-block", ml: "$2" }}>Source</Text>
-              </Box>
-              <Box>
+              </Flex>
+              <Flex align={"center"}>
                 <Switch
                   id="f-time"
                   checked={options.time}
@@ -192,7 +192,7 @@ export const TweetLoader = () => {
                   }}
                 />
                 <Text as="label" htmlFor="f-time" css={{ display: "inline-block", ml: "$2" }}>Time</Text>
-              </Box>
+              </Flex>
             </Flex>
             <Flex align="center" justify={"between"}>
               <Flex align="center">
